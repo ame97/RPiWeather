@@ -2,12 +2,8 @@
 
 """
 #
-#	Autor:	Adrian Martinez Espinosa
-#
-#	Codigo para RPiWeather, una estacion meteorologica con 
-#	Raspberry Pi que twittea los datos que recogen los sensores
-#	junto a una foto del cielo tomada en ese instante con la 
-#	camara P3 Eye
+#	Autor:	Adrian Martinez
+#	GitHub: https://github.com/ame97
 #
 """
 
@@ -32,10 +28,10 @@ def sensorDHT():
 	return h,t
 	
 def tweetea(texto, foto):
-	CONSUMER_KEY = ''
-	CONSUMER_SECRET = ''
-	ACCESS_KEY = ''
-	ACCESS_SECRET = ''
+	CONSUMER_KEY = ''		# Refill with your own twitter API keys
+	CONSUMER_SECRET = ''		#
+	ACCESS_KEY = ''			#
+	ACCESS_SECRET = ''		#
 	
 	auth = tweepy.OauthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 	auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
@@ -43,39 +39,35 @@ def tweetea(texto, foto):
 	x = tweepy.API(auth)
 	x.update_with_media(foto, texto)
 	
-def camara():
-	path = "/home/pi/Desktop/RPiWeather/" + time.strftime("%d-%m-%Y_%X") + ".jpg"
+def camera():
+	path = "/Path to the folder where you want to temporarily save the photo" + time.strftime("%d-%m-%Y_%X") + ".jpg"
 	os.system("fswebcam -d /dev/video0 -r 640x480 --no-banner " + path)
 	
 	return path
 	
 def main():
-	
-	while True:
-		try:
-			print "\nObteniendo datos..."
-			hum, temp = sensorDHT()
-			press, alt = sensorBMP()
+	try:
+		#Obtaining data
+		hum, temp = sensorDHT()
+		press, alt = sensorBMP()
 			
-			print "\nObteniendo la foto..."
-			photo = camara()
+		#Taking the picture
+		pic = camera()
 			
-			print "\nEnviando tweet..."
-			twit = 'Temperatura= {0:0.2f} ยบC'.format(temp) + '\Humedad= {0:0.2f} %'.format(hum)\
-					+ '\nPresion= {0:0.2f} hPa'.format(press) + '\nAltitud= {0:0.2f} m'.format(alt)\
-					+ '\n#Granada #RPiweather'
-			
-			tweetea(twit, photo)
-			
-			os.system("rm " + photo)
-			
-			print "Hecho! \nHasta dentro de 15 min..."
-			time.sleep(900)
+		#Build tweet
+		twit = 'Temperature= {0:0.2f} ºC'.format(temp) + '\Humidity= {0:0.2f} %'.format(hum)\
+				+ '\nPressure= {0:0.2f} hPa'.format(press) + '\nAltitude= {0:0.2f} m'.format(alt)\
+				+ '\n#RPiweather'
 		
-		except KeyboardInterrupt:
-			print "Saliendo del programa..."
-			print "Hasta la proxima!"
-			break
+		#Send tweet
+		tweetea(twit, pic)
+		
+		#Remove the picture
+		os.system("rm " + pic)
+		
+	except KeyboardInterrupt:
+		print "Leaving..."
+		print "See you!"
 
 
 if __name__ == '__main__':
