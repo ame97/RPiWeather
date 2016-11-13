@@ -41,6 +41,11 @@ sudo python setup.py install
 sudo apt-get install fswebcam
 ```
 
+Finally, execute this command:
+```
+git clone https://github.com/ame97/RPiWeather.git
+```
+
 ###SCRIPT EXECUTION
 To run the script every 15 minutes, we can use crontab. To do this, we will put the command
 ```bash
