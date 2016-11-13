@@ -10,7 +10,6 @@
 
 import Adafruit_BMP.BMP085 as BMP 
 import Adafruit_DHT as DHT
-import subprocess as sub
 import tweepy
 import time
 import os
@@ -47,28 +46,23 @@ def camera():
 	return path
 	
 def main():
-	try:
-		#Obtaining data
-		hum, temp = sensorDHT()
-		press, alt = sensorBMP()
+	#Obtaining data
+	hum, temp = sensorDHT()
+	press, alt = sensorBMP()
 			
-		#Taking the picture
-		pic = camera()
+	#Taking the picture
+	pic = camera()
 			
-		#Build tweet
-		twit = 'Temperature= {0:0.2f} ºC'.format(temp) + '\Humidity= {0:0.2f} %'.format(hum)\
-				+ '\nPressure= {0:0.2f} hPa'.format(press) + '\nAltitude= {0:0.2f} m'.format(alt)\
-				+ '\n#RPiweather'
+	#Build tweet
+	twit = 'Temperature= {0:0.2f} ºC'.format(temp) + '\Humidity= {0:0.2f} %'.format(hum)\
+			+ '\nPressure= {0:0.2f} hPa'.format(press) + '\nAltitude= {0:0.2f} m'.format(alt)\
+			+ '\n#RPiweather'
 		
-		#Send tweet
-		tweetea(twit, pic)
+	#Send tweet
+	tweetea(twit, pic)
 		
-		#Remove the picture
-		os.system("rm " + pic)
-		
-	except KeyboardInterrupt:
-		print "Leaving..."
-		print "See you!"
+	#Remove the picture
+	os.system("rm " + pic)
 
 
 if __name__ == '__main__':
