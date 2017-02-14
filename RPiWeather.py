@@ -27,7 +27,7 @@ def sensorDHT():
 	
 	return h,t
 	
-def tweetea(texto, foto):
+def tweetea(text, pic):
 	CONSUMER_KEY = ''		# Refill with your own twitter API keys
 	CONSUMER_SECRET = ''		#
 	ACCESS_KEY = ''			#
@@ -37,10 +37,10 @@ def tweetea(texto, foto):
 	auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 	
 	x = tweepy.API(auth)
-	x.update_with_media(foto, texto)
+	x.update_with_media(pic, text)
 	
 def camera():
-	path = "/Path to the folder where you want to temporarily save the photo" + time.strftime("%d-%m-%Y_%X") + ".jpg"
+	path = "/Path to the folder where you want to temporarily save the photo/" + time.strftime("%d-%m-%Y_%X") + ".jpg"
 	os.system("fswebcam -d /dev/video0 -r 640x480 --no-banner " + path)
 	
 	return path
@@ -56,7 +56,7 @@ def main():
 	#Build tweet
 	twit = 'Temperature= {0:0.2f} ºC'.format(temp) + '\Humidity= {0:0.2f} %'.format(hum)\
 			+ '\nPressure= {0:0.2f} hPa'.format(press) + '\nAltitude= {0:0.2f} m'.format(alt)\
-			+ '\n#RPiweather'
+			+ '\n#RPiWeather'
 		
 	#Send tweet
 	tweetea(twit, pic)
